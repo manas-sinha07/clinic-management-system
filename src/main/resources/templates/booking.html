@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+<title>CuraNest Clinic | Book an Appointment</title>
+
+<link rel="stylesheet" href="/css/clinic.css">
+
+
+</head>
+
+<body>
+
+<header class="topbar">
+
+
+<a class="brand" th:href="@{/}">
+    <span class="brand-mark">
+        <span></span>
+    </span>
+
+    <span class="brand-text">
+        CuraNest
+        <small>CLINIC</small>
+    </span>
+</a>
+
+<nav>
+    <a class="nav-link active" th:href="@{/}">
+        Book appointment
+    </a>
+</nav>
+
+
+</header>
+
+<main class="page-shell">
+
+
+<!-- LEFT SIDE -->
+
+<section class="intro">
+
+    <div class="intro-content">
+
+        <div class="eyebrow">
+            <span class="eyebrow-line"></span>
+            PATIENT SERVICES
+        </div>
+
+        <h1>
+            Care that fits
+            <br>
+            <em>your schedule.</em>
+        </h1>
+
+        <p class="intro-copy">
+            Request a visit with one of our clinicians.
+            Your appointment will be confirmed after our
+            care team reviews your request.
+        </p>
+
+
+        <div class="trust-list">
+
+            <div class="trust-item">
+
+                <div class="trust-icon check-icon">
+                    <span></span>
+                </div>
+
+                <div>
+                    <strong>Thoughtful care</strong>
+                    <small>
+                        Experienced clinicians, one connected team.
+                    </small>
+                </div>
+
+            </div>
+
+
+            <div class="trust-item">
+
+                <div class="trust-icon clock-icon">
+                    <span></span>
+                </div>
+
+                <div>
+                    <strong>Quick response</strong>
+                    <small>
+                        Most requests are reviewed within one business day.
+                    </small>
+                </div>
+
+            </div>
+
+
+            <div class="trust-item">
+
+                <div class="trust-icon shield-icon">
+                    <span></span>
+                </div>
+
+                <div>
+                    <strong>Simple process</strong>
+                    <small>
+                        Submit your request and we'll handle the rest.
+                    </small>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- FORM -->
+
+<section class="form-panel">
+
+    <div class="panel-heading">
+
+        <div>
+
+            <div class="eyebrow">
+                <span class="eyebrow-line"></span>
+                NEW REQUEST
+            </div>
+
+            <h2>Book an appointment</h2>
+
+            <p class="panel-description">
+                Tell us a little about your visit.
+            </p>
+
+        </div>
+
+        <span class="step-count">
+            01 <i>/</i> 01
+        </span>
+
+    </div>
+
+
+    <div class="alert success"
+         th:if="${success}"
+         th:text="${success}">
+    </div>
+
+
+    <form th:action="@{/appointments}" method="post">
+
+        <!-- ABOUT YOU -->
+
+        <div class="form-section">
+
+            <div class="section-title">
+
+                <span class="section-number">01</span>
+
+                <div>
+                    <h3>About you</h3>
+                    <p>Your contact information</p>
+                </div>
+
+            </div>
+
+
+            <div class="form-grid">
+
+                <label>
+
+                    <span>Full name</span>
+
+                    <div class="input-wrapper">
+                        <input
+                                name="patientName"
+                                type="text"
+                                placeholder="e.g. Jordan Smith"
+                                required>
+                    </div>
+
+                </label>
+
+
+                <label>
+
+                    <span>Phone number</span>
+
+                    <div class="input-wrapper">
+                        <input
+                                name="phone"
+                                type="tel"
+                                placeholder="+1 555 000 0000"
+                                required>
+                    </div>
+
+                </label>
+
+
+                <label class="full">
+
+                    <span>Email address</span>
+
+                    <div class="input-wrapper">
+                        <input
+                                name="email"
+                                type="email"
+                                placeholder="you@example.com"
+                                required>
+                    </div>
+
+                </label>
+
+            </div>
+
+        </div>
+
+
+        <!-- VISIT DETAILS -->
+
+        <div class="form-section">
+
+            <div class="section-title">
+
+                <span class="section-number">02</span>
+
+                <div>
+                    <h3>Visit details</h3>
+                    <p>Choose your preferred schedule</p>
+                </div>
+
+            </div>
+
+
+            <div class="form-grid">
+
+                <label>
+
+                    <span>Department</span>
+
+                    <div class="input-wrapper select-wrapper">
+
+                        <select name="department" required>
+
+                            <option value="" selected disabled>
+                                Select department
+                            </option>
+
+                            <option>General Medicine</option>
+                            <option>Cardiology</option>
+                            <option>Dermatology</option>
+                            <option>Pediatrics</option>
+
+                        </select>
+
+                    </div>
+
+                </label>
+
+
+                <label>
+
+                    <span>Preferred clinician</span>
+
+                    <div class="input-wrapper select-wrapper">
+
+                        <select name="doctor" required>
+
+                            <option value="" selected disabled>
+                                Select clinician
+                            </option>
+
+                            <option>Dr. Maya Patel</option>
+                            <option>Dr. Liam Chen</option>
+                            <option>Dr. Elena Rivera</option>
+
+                        </select>
+
+                    </div>
+
+                </label>
+
+
+                <label>
+
+                    <span>Preferred date</span>
+
+                    <div class="input-wrapper">
+
+                        <input
+                                name="date"
+                                type="date"
+                                th:attr="min=${minimumDate}"
+                                required>
+
+                    </div>
+
+                </label>
+
+
+                <label>
+
+                    <span>Preferred time</span>
+
+                    <div class="input-wrapper select-wrapper">
+
+                        <select name="time" required>
+
+                            <option value="" selected disabled>
+                                Select time
+                            </option>
+
+                            <option value="09:00">09:00 AM</option>
+                            <option value="09:30">09:30 AM</option>
+                            <option value="11:00">11:00 AM</option>
+                            <option value="14:00">02:00 PM</option>
+                            <option value="15:30">03:30 PM</option>
+
+                        </select>
+
+                    </div>
+
+                </label>
+
+
+                <label class="full">
+
+                    <span>Reason for visit</span>
+
+                    <div class="input-wrapper">
+
+                        <textarea
+                                name="reason"
+                                rows="3"
+                                placeholder="Briefly tell us how we can help"
+                                required></textarea>
+
+                    </div>
+
+                </label>
+
+            </div>
+
+        </div>
+
+
+        <button class="primary-button" type="submit">
+
+            <span>Send appointment request</span>
+
+            <span class="button-arrow">→</span>
+
+        </button>
+
+
+        <p class="form-note">
+            Your request will be reviewed by our care team before the
+            appointment is confirmed.
+        </p>
+
+    </form>
+
+</section>
+
+
+</main>
+
+<footer>
+
+
+<span>© 2026 CuraNest Clinic</span>
+
+<span>Mon–Fri · 8:00 AM–6:00 PM</span>
+
+
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
+
+<title>CuraNest Clinic | Admin Portal</title>
+
+<link rel="stylesheet" href="/css/clinic.css">
+
+
+</head>
+
+<body class="admin-body">
+
+<header class="topbar">
+
+
+<a class="brand" th:href="@{/}">
+
+    <span class="brand-mark">
+        <span></span>
+    </span>
+
+    <span class="brand-text">
+        CuraNest
+        <small>CLINIC</small>
+    </span>
+
+</a>
+
+
+<nav>
+
+    <a class="nav-link" th:href="@{/}">
+        Patient booking
+    </a>
+
+    <a class="nav-link active" th:href="@{/admin}">
+        Admin portal
+    </a>
+
+</nav>
+
+
+</header>
+
+<main class="admin-shell">
+
+
+<!-- PAGE HEADER -->
+
+<div class="admin-title">
+
+    <div>
+
+        <div class="eyebrow">
+            <span class="eyebrow-line"></span>
+            CARE OPERATIONS
+        </div>
+
+        <h1>Appointment requests</h1>
+
+        <p>
+            Review incoming requests and keep the clinic
+            schedule moving.
+        </p>
+
+    </div>
+
+
+    <div class="admin-date">
+
+        <span class="date-icon"></span>
+
+        <span th:text="${#temporals.format(
+            T(java.time.LocalDate).now(),
+            'EEEE, MMMM d, yyyy')}">
+        </span>
+
+    </div>
+
+</div>
+
+
+<!-- ALERTS -->
+
+<div class="alert success"
+     th:if="${success}"
+     th:text="${success}">
+</div>
+
+
+<div class="alert error"
+     th:if="${error}"
+     th:text="${error}">
+</div>
+
+
+<!-- METRICS -->
+
+<section class="metrics">
+
+
+    <div class="metric metric-pending">
+
+        <div class="metric-top">
+
+            <span class="metric-label">
+                Awaiting review
+            </span>
+
+            <span class="metric-indicator"></span>
+
+        </div>
+
+        <strong th:text="${pendingCount}">
+            0
+        </strong>
+
+        <span class="metric-caption">
+            Needs a decision
+        </span>
+
+    </div>
+
+
+    <div class="metric metric-approved">
+
+        <div class="metric-top">
+
+            <span class="metric-label">
+                Approved
+            </span>
+
+            <span class="metric-indicator"></span>
+
+        </div>
+
+        <strong th:text="${approvedCount}">
+            0
+        </strong>
+
+        <span class="metric-caption">
+            Ready to attend
+        </span>
+
+    </div>
+
+
+    <div class="metric metric-rejected">
+
+        <div class="metric-top">
+
+            <span class="metric-label">
+                Declined
+            </span>
+
+            <span class="metric-indicator"></span>
+
+        </div>
+
+        <strong th:text="${rejectedCount}">
+            0
+        </strong>
+
+        <span class="metric-caption">
+            Requests closed
+        </span>
+
+    </div>
+
+
+</section>
+
+
+<!-- REQUEST TABLE -->
+
+<section class="queue-panel">
+
+
+    <div class="queue-heading">
+
+        <div>
+
+            <div class="queue-title-row">
+
+                <span class="queue-icon"></span>
+
+                <h2>All requests</h2>
+
+            </div>
+
+            <span class="queue-subtitle">
+                Review each request before confirming a visit
+            </span>
+
+        </div>
+
+
+        <span class="record-count"
+              th:text="${appointments.size()} + ' records'">
+            0 records
+        </span>
+
+    </div>
+
+
+    <div class="table-wrap">
+
+        <table>
+
+            <thead>
+
+            <tr>
+
+                <th>Patient</th>
+
+                <th>Requested visit</th>
+
+                <th>Schedule</th>
+
+                <th>Status</th>
+
+                <th class="action-head">
+                    Action
+                </th>
+
+            </tr>
+
+            </thead>
+
+
+            <tbody>
+
+
+            <tr th:each="appointment : ${appointments}">
+
+
+                <!-- PATIENT -->
+
+                <td>
+
+                    <div class="patient-cell">
+
+                        <div class="patient-avatar">
+
+                            <span
+                                th:text="${#strings.substring(
+                                appointment.patientName,0,1)
+                                .toUpperCase()}">
+                                P
+                            </span>
+
+                        </div>
+
+
+                        <div class="cell-content">
+
+                            <strong
+                                th:text="${appointment.patientName}">
+                                Patient
+                            </strong>
+
+                            <span
+                                th:text="${appointment.email}">
+                                email
+                            </span>
+
+                            <span
+                                class="phone-text"
+                                th:text="${appointment.phone}">
+                                phone
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </td>
+
+
+                <!-- VISIT -->
+
+                <td>
+
+                    <div class="cell-content">
+
+                        <strong
+                            th:text="${appointment.doctor}">
+                            Doctor
+                        </strong>
+
+                        <span
+                            class="department-text"
+                            th:text="${appointment.department}">
+                            Department
+                        </span>
+
+                        <span
+                            class="reason-text"
+                            th:text="${appointment.reason}">
+                            Reason
+                        </span>
+
+                    </div>
+
+                </td>
+
+
+                <!-- SCHEDULE -->
+
+                <td>
+
+                    <div class="schedule-cell">
+
+                        <strong
+                            th:text="${#temporals.format(
+                            appointment.date,
+                            'MMM d, yyyy')}">
+                            Date
+                        </strong>
+
+                        <span
+                            th:text="${#temporals.format(
+                            appointment.time,
+                            'h:mm a')}">
+                            Time
+                        </span>
+
+                    </div>
+
+                </td>
+
+
+                <!-- STATUS -->
+
+                <td>
+
+                    <span
+                        class="status"
+                        th:classappend="${' status-' +
+                        #strings.toLowerCase(
+                        appointment.status)}"
+                        th:text="${appointment.status}">
+                        PENDING
+                    </span>
+
+                </td>
+
+
+                <!-- ACTION -->
+
+                <td class="actions">
+
+
+                    <div class="action-buttons"
+                         th:if="${appointment.status.name() == 'PENDING'}">
+
+
+                        <form
+                            th:action="@{/admin/appointments/status}"
+                            method="post">
+
+                            <input
+                                type="hidden"
+                                name="id"
+                                th:value="${appointment.id}">
+
+                            <input
+                                type="hidden"
+                                name="status"
+                                value="APPROVED">
+
+                            <button
+                                class="action-button approve"
+                                type="submit">
+
+                                <span class="action-check"></span>
+
+                                Approve
+
+                            </button>
+
+                        </form>
+
+
+                        <form
+                            th:action="@{/admin/appointments/status}"
+                            method="post">
+
+                            <input
+                                type="hidden"
+                                name="id"
+                                th:value="${appointment.id}">
+
+                            <input
+                                type="hidden"
+                                name="status"
+                                value="REJECTED">
+
+                            <button
+                                class="action-button reject"
+                                type="submit">
+
+                                <span class="action-cross"></span>
+
+                                Reject
+
+                            </button>
+
+                        </form>
+
+
+                    </div>
+
+
+                    <span
+                        class="action-done"
+                        th:if="${appointment.status.name() != 'PENDING'}">
+
+                        Reviewed
+
+                    </span>
+
+
+                </td>
+
+
+            </tr>
+
+
+            <tr th:if="${appointments.isEmpty()}">
+
+                <td
+                    class="empty-state"
+                    colspan="5">
+
+                    <div class="empty-icon"></div>
+
+                    <strong>
+                        No appointment requests
+                    </strong>
+
+                    <span>
+                        New patient requests will appear here.
+                    </span>
+
+                </td>
+
+            </tr>
+
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</section>
+
+
+</main>
+
+</body>
+</html>
